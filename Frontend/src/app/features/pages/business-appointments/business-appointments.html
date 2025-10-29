@@ -1,0 +1,194 @@
+<div class="business-appointments-container">
+  <div class="header">
+    <button class="back-button" (click)="goBack()">
+      ← Volver
+    </button>
+    <h1>Gestión de Citas</h1>
+    <p class="business-name" *ngIf="business()">{{ business()?.name }}</p>
+  </div>
+
+  <div class="filters-section">
+    <div class="filter-group">
+      <label for="statusFilter">Estado:</label>
+      <select 
+        id="statusFilter" 
+        [value]="statusFilter()" 
+        (change)="onStatusFilterChange($event)"
+        class="filter-select"
+      >
+        <option value="all">Todos</option>
+        <option value="pending">Pendientes</option>
+        <option value="confirmed">Confirmadas</option>
+        <option value="cancelled">Canceladas</option>
+        <option value="completed">Completadas</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="dateFilter">Fecha:</label>
+      <input 
+        type="date" 
+        id="dateFilter"
+        [value]="dateFilter()"
+        (change)="onDateFilterChange($event)"
+        class="filter-input"
+      >
+    </div>
+
+    <button 
+      class="clear-filters-btn" 
+      (click)="clearFilters()"
+      *ngIf="statusFilter() !== 'all' || dateFilter()"
+    >
+      Limpiar Filtros
+    </button>
+  </div>
+
+  <div class="loading" *ngIf="loading()">
+    <div class="spinner"></div>
+    <p>Cargando citas...</p>
+  </div>
+
+  <div class="no-appointments" *ngIf="!loading() && appointments().length === 0">
+    <h3>No hay citas registradas</h3>
+    <p>Las citas que reserven tus clientes aparecerán aquí.</p>
+  </div>
+
+  <div class="appointments-content" *ngIf="!loading() && appointments().length > 0">
+    
+    <div class="appointments-section" *ngIf="getUpcomingAppointments().length > 0">
+      <h2>Citas Próximas</h2>
+      <div class="appointments-grid">
+        <div 
+          class="appointment-card upcoming" 
+          *ngFor="let appointment of getUpcomingAppointments()"
+        >
+          <div class="appointment-header">
+            <div class="appointment-date">
+              <span class="date">{{ formatDate(appointment.appointment_date) }}</span>
+              <span class="time">{{ formatTime(appointment.start_time) }} - {{ formatTime(appointment.end_time) }}</span>
+            </div>
+            <div class="appointment-status">
+              <span [class]="'status-badge ' + getStatusClass(appointment.status)">
+                {{ getStatusLabel(appointment.status) }}
+              </span>
+            </div>
+          </div>
+
+          <div class="appointment-details">
+            <div class="detail-row">
+              <strong>Cliente:</strong> {{ appointment.client?.name || 'N/A' }}
+            </div>
+            <div class="detail-row">
+              <strong>Servicio:</strong> {{ appointment.service?.name || 'N/A' }}
+            </div>
+            <div class="detail-row" *ngIf="appointment.service?.price">
+              <strong>Precio:</strong> ${{ appointment.service?.price }}
+            </div>
+            <div class="detail-row" *ngIf="appointment.service?.duration_minutes">
+              <strong>Duración:</strong> {{ appointment.service?.duration_minutes }} min
+            </div>
+            <div class="detail-row" *ngIf="appointment.notes">
+              <strong>Notas:</strong> {{ appointment.notes }}
+            </div>
+          </div>
+
+          <div class="appointment-actions" *ngIf="appointment.status === 'pending'">
+            <button 
+              class="btn btn-success btn-small" 
+              (click)="updateAppointmentStatus(appointment, 'confirmed')"
+            >
+              Confirmar
+            </button>
+            <button 
+              class="btn btn-danger btn-small" 
+              (click)="updateAppointmentStatus(appointment, 'cancelled')"
+            >
+              Cancelar
+            </button>
+          </div>
+
+          <div class="appointment-actions" *ngIf="appointment.status === 'confirmed'">
+            <button 
+              class="btn btn-primary btn-small" 
+              (click)="updateAppointmentStatus(appointment, 'completed')"
+            >
+              Marcar Completada
+            </button>
+            <button 
+              class="btn btn-warning btn-small" 
+              (click)="updateAppointmentStatus(appointment, 'cancelled')"
+            >
+              Cancelar
+            </button>
+          </div>
+
+          <div class="appointment-actions" *ngIf="appointment.status === 'completed' || appointment.status === 'cancelled'">
+            <span class="action-completed">
+              {{ appointment.status === 'completed' ? 'Cita completada' : 'Cita cancelada' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="appointments-section" *ngIf="getPastAppointments().length > 0">
+      <h2>Historial de Citas</h2>
+      <div class="appointments-grid">
+        <div 
+          class="appointment-card past" 
+          *ngFor="let appointment of getPastAppointments()"
+        >
+          <div class="appointment-header">
+            <div class="appointment-date">
+              <span class="date">{{ formatDate(appointment.appointment_date) }}</span>
+              <span class="time">{{ formatTime(appointment.start_time) }} - {{ formatTime(appointment.end_time) }}</span>
+            </div>
+            <div class="appointment-status">
+              <span [class]="'status-badge ' + getStatusClass(appointment.status)">
+                {{ getStatusLabel(appointment.status) }}
+              </span>
+            </div>
+          </div>
+
+          <div class="appointment-details">
+            <div class="detail-row">
+              <strong>Cliente:</strong> {{ appointment.client?.name || 'N/A' }}
+            </div>
+            <div class="detail-row">
+              <strong>Servicio:</strong> {{ appointment.service?.name || 'N/A' }}
+            </div>
+            <div class="detail-row" *ngIf="appointment.service?.price">
+              <strong>Precio:</strong> ${{ appointment.service?.price }}
+            </div>
+            <div class="detail-row" *ngIf="appointment.notes">
+              <strong>Notas:</strong> {{ appointment.notes }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary-section">
+      <h3>Resumen</h3>
+      <div class="summary-stats">
+        <div class="stat-item">
+          <span class="stat-number">{{ getUpcomingAppointments().length }}</span>
+          <span class="stat-label">Citas Próximas</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">{{ getPendingCount() }}</span>
+          <span class="stat-label">Pendientes</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">{{ getConfirmedCount() }}</span>
+          <span class="stat-label">Confirmadas</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">{{ getCompletedCount() }}</span>
+          <span class="stat-label">Completadas</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

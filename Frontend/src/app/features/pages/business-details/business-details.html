@@ -1,0 +1,137 @@
+<div class="business-details-container">
+  <div class="business-header" *ngIf="business">
+    <button class="back-button" (click)="goBack()">
+      ← Volver
+    </button>
+    
+    <div class="business-info">
+      <div class="business-images">
+        <img 
+          [src]="business.cover_image_url || '/assets/default-business.svg'" 
+          [alt]="business.name"
+          class="cover-image"
+        >
+        <img 
+          [src]="business.logo_url || '/assets/default-business.svg'" 
+          [alt]="business.name"
+          class="logo-image"
+        >
+      </div>
+      
+      <div class="business-details">
+        <h1>{{ business.name }}</h1>
+        <p class="description">{{ business.description }}</p>
+        
+        <div class="business-meta">
+          <div class="meta-item" *ngIf="business.address">
+            <span>{{ business.address }}</span>
+          </div>
+          <div class="meta-item" *ngIf="business.phone">
+            <span>{{ business.phone }}</span>
+          </div>
+          <div class="meta-item" *ngIf="business.email">
+            <span>{{ business.email }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="service-selection">
+      <h2>Selecciona un Servicio</h2>
+      <div class="services-grid">
+        <div 
+          class="service-card" 
+          *ngFor="let service of services"
+          [class.selected]="selectedService?.id === service.id"
+          (click)="selectService(service)"
+        >
+          <div class="service-image" *ngIf="service.images && service.images.length > 0">
+            <img [src]="service.images[0]" [alt]="service.name">
+          </div>
+          <div class="service-info">
+            <h3>{{ service.name }}</h3>
+            <p>{{ service.description }}</p>
+            <div class="service-details">
+              <span class="price">${{ service.price }}</span>
+              <span class="duration">{{ service.duration_minutes }} min</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="date-selection" *ngIf="selectedService">
+      <h2>Selecciona una Fecha</h2>
+      
+      <div class="calendar-container">
+        <div class="calendar-header">
+          <button class="nav-button" (click)="navigateMonth('prev')">‹</button>
+          <h3>{{ currentMonth.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }) }}</h3>
+          <button class="nav-button" (click)="navigateMonth('next')">›</button>
+        </div>
+        
+        <div class="calendar-grid">
+          <div class="day-header" *ngFor="let day of ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']">
+            {{ day }}
+          </div>
+          
+          <div 
+            class="calendar-day" 
+            *ngFor="let day of calendarDays"
+            [class.today]="isToday(day)"
+            [class.selected]="isSelected(day)"
+            [class.past]="isPastDate(day)"
+            (click)="selectDate(day)"
+          >
+            {{ day.getDate() }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="time-selection" *ngIf="selectedService && selectedDate && availability">
+      <h2>Selecciona una Hora</h2>
+      
+      <div class="selected-date">
+        <strong>{{ formatDisplayDate(selectedDate) }}</strong>
+      </div>
+      
+      <div class="time-slots" *ngIf="!isLoading">
+        <div 
+          class="time-slot" 
+          *ngFor="let slot of availability.timeSlots"
+          [class.available]="slot.available"
+          [class.unavailable]="!slot.available"
+          [class.selected]="selectedTime === slot.time"
+          (click)="selectTimeSlot(slot)"
+        >
+          <span class="time">{{ slot.time }}</span>
+          <span class="status" *ngIf="!slot.available">{{ slot.reason }}</span>
+        </div>
+      </div>
+      
+      <div class="loading" *ngIf="isLoading">
+        <p>Cargando horarios disponibles...</p>
+      </div>
+    </div>
+
+    <div class="booking-section" *ngIf="selectedService && selectedDate && selectedTime">
+      <div class="booking-summary">
+        <h3>Resumen de la Reserva</h3>
+        <div class="summary-details">
+          <p><strong>Servicio:</strong> {{ selectedService.name }}</p>
+          <p><strong>Fecha:</strong> {{ formatDisplayDate(selectedDate) }}</p>
+          <p><strong>Hora:</strong> {{ selectedTime }}</p>
+          <p><strong>Duración:</strong> {{ selectedService.duration_minutes }} minutos</p>
+          <p><strong>Precio:</strong> ${{ selectedService.price }}</p>
+        </div>
+      </div>
+      
+      <button class="book-button" (click)="bookAppointment()">
+        Reservar Cita
+      </button>
+    </div>
+  </div>
+</div>

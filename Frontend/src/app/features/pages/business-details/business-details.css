@@ -1,0 +1,376 @@
+.business-details-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.back-button {
+  background: #145c8a;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.back-button:hover {
+  background: #0f4a6b;
+}
+
+.business-header {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.business-info {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.business-images {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.cover-image {
+  width: 300px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.logo-image {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.business-details h1 {
+  color: #2c3e50;
+  margin: 0 0 1rem 0;
+  font-size: 2rem;
+}
+
+.description {
+  color: #7f8c8d;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.business-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #2c3e50;
+}
+
+.icon {
+  font-size: 1.2rem;
+}
+
+.main-content {
+  display: grid;
+  gap: 2rem;
+}
+
+.service-selection h2,
+.date-selection h2,
+.time-selection h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.service-card {
+  background: white;
+  border: 2px solid #ecf0f1;
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.service-card:hover {
+  border-color: #145c8a;
+  transform: translateY(-2px);
+}
+
+.service-card.selected {
+  border-color: #27ae60;
+  background: #f8fff8;
+}
+
+.service-image {
+  width: 100%;
+  height: 120px;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.service-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.service-info h3 {
+  color: #2c3e50;
+  margin: 0 0 0.5rem 0;
+}
+
+.service-info p {
+  color: #7f8c8d;
+  margin: 0 0 1rem 0;
+  font-size: 0.9rem;
+}
+
+.service-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.price {
+  color: #27ae60;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.duration {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+.calendar-container {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.nav-button {
+  background: #145c8a;
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.nav-button:hover {
+  background: #0f4a6b;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.day-header {
+  text-align: center;
+  font-weight: 600;
+  color: #7f8c8d;
+  padding: 0.5rem;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #f8f9fa;
+}
+
+.calendar-day:hover {
+  background: #e9ecef;
+}
+
+.calendar-day.today {
+  background: #145c8a;
+  color: white;
+}
+
+.calendar-day.selected {
+  background: #27ae60;
+  color: white;
+}
+
+.calendar-day.past {
+  background: #e9ecef;
+  color: #adb5bd;
+  cursor: not-allowed;
+}
+
+.time-selection {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.selected-date {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.5rem;
+}
+
+.time-slot {
+  padding: 0.75rem;
+  border: 2px solid #ecf0f1;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.time-slot.available {
+  background: #f8fff8;
+  border-color: #27ae60;
+}
+
+.time-slot.available:hover {
+  background: #27ae60;
+  color: white;
+}
+
+.time-slot.selected {
+  background: #27ae60;
+  color: white;
+}
+
+.time-slot.unavailable {
+  background: #fdf2f2;
+  border-color: #e74c3c;
+  cursor: not-allowed;
+  opacity: 0.6;
+  color: #e74c3c;
+}
+
+.time-slot.unavailable:hover {
+  background: #fdf2f2;
+  border-color: #e74c3c;
+  transform: none;
+}
+
+.time {
+  font-weight: 600;
+}
+
+.status {
+  font-size: 0.8rem;
+  color: #e74c3c;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #7f8c8d;
+}
+
+.booking-section {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.booking-summary {
+  margin-bottom: 1.5rem;
+}
+
+.booking-summary h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.summary-details {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+.summary-details p {
+  margin: 0.5rem 0;
+  color: #34495e;
+}
+
+.book-button {
+  width: 100%;
+  background: #27ae60;
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.book-button:hover {
+  background: #229954;
+}
+
+@media (max-width: 768px) {
+  .business-info {
+    flex-direction: column;
+  }
+  
+  .cover-image {
+    width: 100%;
+  }
+  
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .time-slots {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+}

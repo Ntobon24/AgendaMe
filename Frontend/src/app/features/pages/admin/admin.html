@@ -1,0 +1,217 @@
+<div class="admin-container">
+  <div class="admin-header">
+    <button class="back-btn" (click)="goBack()">
+      ← Volver
+    </button>
+    <h1>Panel de Administración</h1>
+  </div>
+
+  <div class="admin-content">
+    <div class="admin-sidebar">
+      <nav class="admin-nav">
+        <button 
+          [class]="'nav-item ' + (activeTab() === 'stats' ? 'active' : '')"
+          (click)="setActiveTab('stats')"
+        >
+          Estadísticas
+        </button>
+        <button 
+          [class]="'nav-item ' + (activeTab() === 'users' ? 'active' : '')"
+          (click)="setActiveTab('users')"
+        >
+          Usuarios
+        </button>
+        <button 
+          [class]="'nav-item ' + (activeTab() === 'businesses' ? 'active' : '')"
+          (click)="setActiveTab('businesses')"
+        >
+          Negocios
+        </button>
+        <button 
+          [class]="'nav-item ' + (activeTab() === 'tags' ? 'active' : '')"
+          (click)="setActiveTab('tags')"
+        >
+          Etiquetas
+        </button>
+      </nav>
+    </div>
+
+    <div class="admin-main">
+      <div *ngIf="activeTab() === 'stats'" class="stats-section">
+        <h2>Estadísticas Generales</h2>
+        
+        <div class="loading" *ngIf="isLoading()">
+          <div class="spinner"></div>
+          <p>Cargando estadísticas...</p>
+        </div>
+
+        <div *ngIf="!isLoading() && stats()" class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-content">
+              <h3>{{ stats()?.totalUsers }}</h3>
+              <p>Usuarios</p>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-content">
+              <h3>{{ stats()?.totalBusinesses }}</h3>
+              <p>Negocios</p>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-content">
+              <h3>{{ stats()?.totalServices }}</h3>
+              <p>Servicios</p>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-content">
+              <h3>{{ stats()?.totalAppointments }}</h3>
+              <p>Citas</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="activeTab() === 'users'" class="users-section">
+        <h2>Gestión de Usuarios</h2>
+        
+        <div class="loading" *ngIf="isLoading()">
+          <div class="spinner"></div>
+          <p>Cargando usuarios...</p>
+        </div>
+
+        <div *ngIf="!isLoading()" class="users-table">
+          <div class="table-header">
+            <div>Nombre</div>
+            <div>Email</div>
+            <div>Rol</div>
+            <div>Estado</div>
+            <div>Acciones</div>
+          </div>
+          
+          <div *ngFor="let user of users()" class="table-row">
+            <div class="user-info">
+              <img [src]="user.avatar_url || '/assets/default-avatar.svg'" alt="Avatar" class="user-avatar">
+              <span>{{ user.name || 'Sin nombre' }}</span>
+            </div>
+            <div>{{ user.email }}</div>
+            <div>
+              <span [class]="'role-badge ' + user.role">{{ user.role }}</span>
+            </div>
+            <div>
+              <span [class]="'status-badge ' + (user.is_active ? 'active' : 'inactive')">
+                {{ user.is_active ? 'Activo' : 'Inactivo' }}
+              </span>
+            </div>
+            <div class="actions">
+              <button 
+                *ngIf="user.is_active"
+                class="deactivate-btn"
+                (click)="deactivateUser(user.id!)"
+              >
+                Desactivar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="activeTab() === 'businesses'" class="businesses-section">
+        <h2>Gestión de Negocios</h2>
+        
+        <div class="loading" *ngIf="isLoading()">
+          <div class="spinner"></div>
+          <p>Cargando negocios...</p>
+        </div>
+
+        <div *ngIf="!isLoading()" class="businesses-grid">
+          <div *ngFor="let business of businesses()" class="business-card">
+            <div class="business-header">
+              <img [src]="business.logo_url || '/assets/default-business.svg'" alt="Logo" class="business-logo">
+              <div class="business-info">
+                <h3>{{ business.name }}</h3>
+                <p>{{ business.description || 'Sin descripción' }}</p>
+              </div>
+            </div>
+            
+            <div class="business-details">
+              <p *ngIf="business.address">{{ business.address }}</p>
+              <p *ngIf="business.phone">{{ business.phone }}</p>
+              <div class="business-tags" *ngIf="business.tags && business.tags.length > 0">
+                <span *ngFor="let tag of business.tags" class="business-tag">{{ tag }}</span>
+              </div>
+            </div>
+            
+            <div class="business-actions">
+              <button 
+                class="edit-btn"
+                (click)="assignTagsToBusiness(business)"
+              >
+                Asignar Etiquetas
+              </button>
+              <button 
+                *ngIf="business.is_active"
+                class="deactivate-btn"
+                (click)="deactivateBusiness(business.id)"
+              >
+                Desactivar
+              </button>
+              <button 
+                class="delete-btn"
+                (click)="deleteBusiness(business.id)"
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="activeTab() === 'tags'" class="tags-section">
+        <div class="section-header">
+          <h2>Gestión de Etiquetas</h2>
+          <button class="create-btn" (click)="createTag()">
+            + Crear Etiqueta
+          </button>
+        </div>
+        
+        <div class="loading" *ngIf="isLoading()">
+          <div class="spinner"></div>
+          <p>Cargando etiquetas...</p>
+        </div>
+
+        <div *ngIf="!isLoading()" class="tags-grid">
+          <div *ngFor="let tag of tags()" class="tag-card">
+            <div class="tag-header">
+              <h3>{{ tag.name }}</h3>
+              <div class="tag-status">
+                <span [class]="'status-badge ' + (tag.is_active ? 'active' : 'inactive')">
+                  {{ tag.is_active ? 'Activa' : 'Inactiva' }}
+                </span>
+              </div>
+            </div>
+            <p class="tag-description">{{ tag.description || 'Sin descripción' }}</p>
+            <div class="tag-actions">
+              <button class="edit-btn" (click)="updateTag(tag)">
+                Editar
+              </button>
+              <button 
+                [class]="tag.is_active ? 'deactivate-btn' : 'activate-btn'"
+                (click)="toggleTagStatus(tag)"
+              >
+                {{ tag.is_active ? 'Desactivar' : 'Activar' }}
+              </button>
+              <button class="delete-btn" (click)="deleteTag(tag.id)">
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,261 @@
+<div class="business-profile-container">
+  <div class="business-profile-card">
+    <div class="profile-header">
+      <h1>{{ isEditMode ? 'Editar Mi Negocio' : 'Crear Mi Negocio' }}</h1>
+      <p>{{ isEditMode ? 'Actualiza la información de tu negocio' : 'Registra tu negocio en AgendaMe' }}</p>
+    </div>
+
+    <form [formGroup]="businessForm" (ngSubmit)="onSubmit()" class="business-form">
+      <div class="form-group">
+        <label for="name">Nombre del Negocio</label>
+        <input 
+          type="text" 
+          id="name" 
+          formControlName="name"
+          class="form-control"
+          [class.error]="getFieldError('name')"
+          placeholder="Ingresa el nombre de tu negocio"
+        >
+        <div class="error-message" *ngIf="getFieldError('name')">
+          {{ getFieldError('name') }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Descripción</label>
+        <textarea 
+          id="description" 
+          formControlName="description"
+          class="form-control textarea"
+          [class.error]="getFieldError('description')"
+          placeholder="Describe tu negocio, servicios, horarios, etc."
+          rows="4"
+        ></textarea>
+        <div class="error-message" *ngIf="getFieldError('description')">
+          {{ getFieldError('description') }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="address">Dirección</label>
+        <input 
+          type="text" 
+          id="address" 
+          formControlName="address"
+          class="form-control"
+          placeholder="Dirección del negocio"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Teléfono</label>
+        <input 
+          type="tel" 
+          id="phone" 
+          formControlName="phone"
+          class="form-control"
+          placeholder="Número de teléfono"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          formControlName="email"
+          class="form-control"
+          placeholder="Email de contacto"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="website">Sitio Web</label>
+        <input 
+          type="url" 
+          id="website" 
+          formControlName="website"
+          class="form-control"
+          placeholder="https://tu-sitio-web.com"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="logo">Logo del Negocio (Opcional)</label>
+        <input 
+          type="file" 
+          id="logo" 
+          accept="image/*"
+          class="file-input"
+          (change)="onFileSelected($event, 'logo_url')"
+        >
+        <div class="file-info" *ngIf="businessForm.get('logo_url')?.value">
+          <span class="file-selected">✓ Logo seleccionado</span>
+          <img 
+            [src]="businessForm.get('logo_url')?.value" 
+            alt="Logo preview" 
+            class="preview-image-small"
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="cover">Imagen de Portada (Opcional)</label>
+        <input 
+          type="file" 
+          id="cover" 
+          accept="image/*"
+          class="file-input"
+          (change)="onFileSelected($event, 'cover_image_url')"
+        >
+        <div class="file-info" *ngIf="businessForm.get('cover_image_url')?.value">
+          <span class="file-selected">✓ Imagen de portada seleccionada</span>
+          <img 
+            [src]="businessForm.get('cover_image_url')?.value" 
+            alt="Cover preview" 
+            class="preview-image-small"
+          >
+        </div>
+      </div>
+
+      <div class="schedules-section">
+        <h3>Horarios de Atención</h3>
+        <p class="section-description">Configura los días y horarios en los que tu negocio estará disponible</p>
+        
+        <div class="schedule-grid">
+          <div class="schedule-day" *ngFor="let day of daysOfWeek">
+            <div class="day-header">
+              <label class="day-label">
+                <input 
+                  type="checkbox" 
+                  [checked]="!isDayClosed(day.key)"
+                  (change)="toggleDay(day.key, $event)"
+                  class="day-checkbox"
+                >
+                {{ day.label }}
+              </label>
+            </div>
+            
+            <div class="day-schedule" *ngIf="!isDayClosed(day.key)">
+              <div class="time-inputs">
+                <div class="time-group">
+                  <label>Apertura:</label>
+                  <input 
+                    type="time" 
+                    [value]="getDaySchedule(day.key)?.open || '09:00'"
+                    (change)="updateSchedule(day.key, 'open', $event)"
+                    class="time-input"
+                  >
+                </div>
+                <div class="time-group">
+                  <label>Cierre:</label>
+                  <input 
+                    type="time" 
+                    [value]="getDaySchedule(day.key)?.close || '18:00'"
+                    (change)="updateSchedule(day.key, 'close', $event)"
+                    class="time-input"
+                  >
+                </div>
+              </div>
+            </div>
+            
+            <div class="day-closed" *ngIf="isDayClosed(day.key)">
+              <span class="closed-text">Cerrado</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="services-section">
+        <h3>Mis Servicios</h3>
+        <p class="section-description">Gestiona los servicios que ofreces en tu negocio</p>
+        
+        <div class="services-list" *ngIf="services.length > 0">
+          <div class="service-item" *ngFor="let service of services; let i = index">
+            <div class="service-image" *ngIf="service.images && service.images.length > 0">
+              <img [src]="service.images[0]" [alt]="service.name" class="service-thumbnail">
+            </div>
+            <div class="service-info">
+              <h4>{{ service.name }}</h4>
+              <p>{{ service.description }}</p>
+              <div class="service-details">
+                <span class="price">${{ service.price }}</span>
+                <span class="duration">{{ service.duration_minutes }} min</span>
+              </div>
+            </div>
+            <div class="service-actions">
+              <button type="button" class="btn btn-small btn-secondary" (click)="editService(i)">
+                Editar
+              </button>
+              <button type="button" class="btn btn-small btn-danger" (click)="deleteService(i)">
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="no-services" *ngIf="services.length === 0">
+          <p>No tienes servicios registrados aún.</p>
+        </div>
+        
+        <button type="button" class="btn btn-primary" (click)="addNewService()">
+          + Agregar Servicio
+        </button>
+      </div>
+
+      <div class="form-actions">
+        <button 
+          type="submit" 
+          class="btn btn-primary"
+          [disabled]="businessForm.invalid"
+        >
+          {{ isEditMode ? 'Actualizar Negocio' : 'Crear Negocio' }}
+        </button>
+
+        <button 
+          type="button" 
+          class="btn btn-secondary"
+          (click)="router.navigate(['/'])"
+        >
+          Cancelar
+        </button>
+
+        <button 
+          type="button" 
+          class="btn btn-success"
+          *ngIf="isEditMode"
+          (click)="router.navigate(['/business-appointments'])"
+        >
+          Gestionar Citas
+        </button>
+
+        <button 
+          type="button" 
+          class="btn btn-danger"
+          *ngIf="isEditMode"
+          (click)="deleteBusiness()"
+        >
+          Eliminar Negocio
+        </button>
+      </div>
+    </form>
+
+    <div class="business-preview" *ngIf="businessForm.get('name')?.value || businessForm.get('description')?.value">
+      <h3>Vista Previa</h3>
+      <div class="preview-card">
+        <div class="preview-image">
+          <img 
+            [src]="businessForm.get('cover_image_url')?.value || '/assets/default-business.svg'" 
+            [alt]="businessForm.get('name')?.value"
+            class="preview-cover-image"
+          >
+        </div>
+        <div class="preview-info">
+          <h4>{{ businessForm.get('name')?.value || 'Nombre del negocio' }}</h4>
+          <p>{{ businessForm.get('description')?.value || 'Descripción del negocio' }}</p>
+          <span class="owner">Propietario: {{ currentUser?.username }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,115 @@
+<div class="business-search-container">
+  <div class="search-content-wrapper">
+    <div class="search-header">
+      <button class="back-btn" (click)="goBack()">
+        ← Volver
+      </button>
+      <h1>Buscar Negocios</h1>
+    </div>
+
+    <div class="search-filters">
+    <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+      <div class="search-bar">
+        <input 
+          type="text" 
+          formControlName="query"
+          placeholder="Buscar por nombre o descripción..."
+          class="search-input"
+        >
+        <input 
+          type="text" 
+          formControlName="location"
+          placeholder="Ubicación..."
+          class="search-input"
+        >
+        <button type="submit" class="search-btn" [disabled]="isLoading()">
+          {{ isLoading() ? 'Buscando...' : 'Buscar' }}
+        </button>
+      </div>
+    </form>
+
+    <div class="tags-section">
+      <h3>Filtrar por etiquetas:</h3>
+      
+      <div class="selected-tags" *ngIf="selectedTags().length > 0">
+        <h4>Etiquetas seleccionadas:</h4>
+        <div class="selected-tags-container">
+          <span 
+            *ngFor="let tag of selectedTags()" 
+            class="selected-tag"
+          >
+            {{ tag }}
+            <button class="remove-tag-btn" (click)="toggleTag(tag)">×</button>
+          </span>
+        </div>
+      </div>
+      
+      <div class="tags-container">
+        <button 
+          *ngFor="let tag of availableTags()"
+          [class]="'tag-btn ' + (selectedTags().includes(tag.name) ? 'selected' : '')"
+          (click)="toggleTag(tag.name)"
+        >
+          {{ tag.name }}
+        </button>
+      </div>
+      
+      <button class="clear-btn" (click)="clearFilters()">
+        Limpiar filtros
+      </button>
+    </div>
+  </div>
+
+  <div class="results-section">
+    <div class="results-header">
+      <h2>Resultados ({{ businesses().length }})</h2>
+    </div>
+
+    <div class="loading" *ngIf="isLoading()">
+      <div class="spinner"></div>
+      <p>Buscando negocios...</p>
+    </div>
+
+    <div class="no-results" *ngIf="!isLoading() && businesses().length === 0">
+      <h3>No se encontraron negocios</h3>
+      <p>Intenta ajustar tus filtros de búsqueda</p>
+    </div>
+
+    <div class="businesses-grid" *ngIf="!isLoading() && businesses().length > 0">
+      <div 
+        *ngFor="let business of businesses()" 
+        class="business-card"
+        (click)="viewBusiness(business.id)"
+      >
+        <div class="business-image">
+          <img 
+            [src]="business.logo_url || '/assets/default-business.svg'" 
+            [alt]="business.name"
+            class="business-logo"
+          >
+        </div>
+        
+        <div class="business-info">
+          <h3 class="business-name">{{ business.name }}</h3>
+          <p class="business-description">{{ business.description || 'Sin descripción' }}</p>
+          <p class="business-address" *ngIf="business.address">
+            {{ business.address }}
+          </p>
+          <p class="business-phone" *ngIf="business.phone">
+            {{ business.phone }}
+          </p>
+          
+          <div class="business-tags" *ngIf="business.tags && business.tags.length > 0">
+            <span 
+              *ngFor="let tag of business.tags" 
+              class="business-tag"
+            >
+              {{ tag }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>

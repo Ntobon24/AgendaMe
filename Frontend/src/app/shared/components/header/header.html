@@ -1,0 +1,26 @@
+<header class="header">
+  <div class="container">
+    <div class="logo">
+      <h1>AgendaMe</h1>
+    </div>
+    
+    <nav class="nav">
+      <a routerLink="/" class="nav-link">Inicio</a>
+      <a routerLink="/business-search" class="nav-link">Buscar Negocios</a>
+      
+      <div class="nav-auth" *ngIf="!isLogged">
+        <a routerLink="/login" class="nav-link">Iniciar Sesión</a>
+        <a routerLink="/sign-up" class="nav-link">Registrarse</a>
+      </div>
+      
+      <div class="nav-user" *ngIf="isLogged">
+        <a routerLink="/user-profile" class="nav-link">Mi Perfil</a>
+        <a routerLink="/my-appointments" class="nav-link appointments-link" *ngIf="currentUser?.role === 'client'">Mis Citas</a>
+        <a routerLink="/business-profile" class="nav-link business-link" *ngIf="currentUser?.role === 'business'">Mi Negocio</a>
+        <a routerLink="/business-appointments" class="nav-link appointments-link" *ngIf="currentUser?.role === 'business'">Mis Citas</a>
+        <a routerLink="/admin" class="nav-link admin-link" *ngIf="currentUser?.role === 'admin'">Administrador</a>
+        <button (click)="logout()" class="logout-btn">Cerrar Sesión</button>
+      </div>
+    </nav>
+  </div>
+</header>

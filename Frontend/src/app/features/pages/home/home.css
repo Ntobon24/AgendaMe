@@ -1,0 +1,257 @@
+.home-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+}
+
+.hero-section {
+  background: #145c8a;
+  color: white;
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.hero-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.hero-content p {
+  font-size: 1.1rem;
+  margin-bottom: 0;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0.9;
+}
+
+.info-section {
+  padding: 2rem 0;
+  background: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.info-card {
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.info-card h3 {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.info-card p {
+  color: #7f8c8d;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.info-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.info-actions .btn {
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  display: inline-block;
+}
+
+.info-actions .btn-primary {
+  background: #145c8a;
+  color: white;
+}
+
+.info-actions .btn-primary:hover {
+  background: #0f4a6b;
+}
+
+.info-actions .btn-secondary {
+  background: transparent;
+  color: #145c8a;
+  border: 1px solid #145c8a;
+}
+
+.info-actions .btn-secondary:hover {
+  background: #145c8a;
+  color: white;
+}
+
+.businesses-section {
+  padding: 3rem 0;
+  background: white;
+  flex: 1;
+}
+
+.businesses-section.full-screen {
+  padding: 2rem 0;
+  min-height: calc(100vh - 80px);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.businesses-section h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.businesses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.business-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+  border: 1px solid #e9ecef;
+  cursor: pointer;
+}
+
+.business-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
+}
+
+.business-image {
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+}
+
+.business-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.default-image {
+  width: 100%;
+  height: 100%;
+  background: #ecf0f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+}
+
+.business-info {
+  padding: 1.5rem;
+}
+
+.business-info h3 {
+  margin: 0 0 0.5rem 0;
+  color: #2c3e50;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.business-description {
+  color: #7f8c8d;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.business-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #7f8c8d;
+}
+
+.owner {
+  font-weight: 500;
+}
+
+.no-businesses {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.no-businesses-content {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.no-businesses-content .icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.no-businesses-content h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.no-businesses-content p {
+  color: #7f8c8d;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cta-buttons .btn {
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s;
+  display: inline-block;
+}
+
+.cta-buttons .btn-primary {
+  background: #145c8a;
+  color: white;
+}
+
+.cta-buttons .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(20, 92, 138, 0.4);
+}
+
+.cta-buttons .btn-secondary {
+  background: transparent;
+  color: #145c8a;
+  border: 2px solid #145c8a;
+}
+
+.cta-buttons .btn-secondary:hover {
+  background: #145c8a;
+  color: white;
+}
+

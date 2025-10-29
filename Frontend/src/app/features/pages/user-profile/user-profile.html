@@ -1,0 +1,114 @@
+<div class="user-profile-container">
+  <div class="profile-header">
+    <button class="back-btn" (click)="goBack()">
+      ← Volver
+    </button>
+    <h1>Mi Perfil</h1>
+  </div>
+
+  <div class="profile-content">
+    <div class="profile-card">
+      <div class="avatar-section">
+        <div class="avatar-container">
+          <div 
+            class="avatar-placeholder"
+            *ngIf="!previewUrl"
+          >
+            <span class="avatar-text">{{ getInitials() }}</span>
+          </div>
+          <img 
+            [src]="previewUrl" 
+            alt="Avatar" 
+            class="avatar"
+            *ngIf="previewUrl"
+          >
+          <div class="avatar-overlay" *ngIf="isEditing()">
+            <input 
+              type="file" 
+              accept="image/*" 
+              (change)="onFileSelected($event)"
+              class="file-input"
+              id="avatar-input"
+            >
+            <label for="avatar-input" class="upload-btn">
+              Cambiar foto
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <form [formGroup]="userProfileForm" (ngSubmit)="saveProfile()">
+        <div class="form-group">
+          <label for="name">Nombre completo</label>
+          <input 
+            type="text" 
+            id="name" 
+            formControlName="name"
+            [readonly]="!isEditing()"
+            class="form-input"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email"
+            [readonly]="!isEditing()"
+            class="form-input"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="username">Nombre de usuario</label>
+          <input 
+            type="text" 
+            id="username" 
+            formControlName="username"
+            [readonly]="!isEditing()"
+            class="form-input"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Teléfono</label>
+          <input 
+            type="tel" 
+            id="phone" 
+            formControlName="phone"
+            [readonly]="!isEditing()"
+            class="form-input"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="biography">Biografía</label>
+          <textarea 
+            id="biography" 
+            formControlName="biography"
+            [readonly]="!isEditing()"
+            class="form-textarea"
+            rows="4"
+            placeholder="Cuéntanos sobre ti..."
+          ></textarea>
+        </div>
+
+        <div class="form-actions" *ngIf="!isEditing()">
+          <button type="button" class="edit-btn" (click)="toggleEdit()">
+            Editar perfil
+          </button>
+        </div>
+
+        <div class="form-actions" *ngIf="isEditing()">
+          <button type="button" class="cancel-btn" (click)="cancelEdit()">
+            Cancelar
+          </button>
+          <button type="submit" class="save-btn" [disabled]="userProfileForm.invalid">
+            Guardar cambios
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

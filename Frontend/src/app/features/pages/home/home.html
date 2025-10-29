@@ -1,0 +1,62 @@
+<div class="home-container">
+  <div class="hero-section" *ngIf="!isAuthenticated">
+    <div class="hero-content">
+      <h1>AgendaMe</h1>
+      <p>Descubre los mejores negocios locales y conecta con servicios de calidad</p>
+    </div>
+  </div>
+
+  <div class="info-section" *ngIf="!isAuthenticated">
+    <div class="container">
+      <div class="info-card">
+        <h3>¿Tienes un negocio?</h3>
+        <p>Regístrate y crea tu perfil de negocio para que los clientes puedan encontrarte</p>
+        <div class="info-actions">
+          <a routerLink="/sign-up" class="btn btn-primary">Crear Cuenta</a>
+          <a routerLink="/login" class="btn btn-secondary">Ya tengo cuenta</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="businesses-section" [class.full-screen]="isAuthenticated">
+    <div class="container">
+      <h2>Negocios Registrados</h2>
+      
+      <div class="businesses-grid" *ngIf="businesses.length > 0; else noBusinesses">
+        <div class="business-card" *ngFor="let business of businesses" (click)="viewBusinessDetails(business.id)">
+          <div class="business-image">
+            <img [src]="getBusinessImage(business)" [alt]="business.name" *ngIf="business.logo_url || business.cover_image_url; else defaultImage">
+            <ng-template #defaultImage>
+              <div class="default-image">
+              </div>
+            </ng-template>
+          </div>
+          
+          <div class="business-info">
+            <h3>{{ business.name }}</h3>
+            <p class="business-description">{{ business.description }}</p>
+            <div class="business-meta">
+              <span class="address" *ngIf="business.address">{{ business.address }}</span>
+              <span class="phone" *ngIf="business.phone">{{ business.phone }}</span>
+              <span class="date" *ngIf="business.created_at">Registrado: {{ formatDate(business.created_at) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noBusinesses>
+        <div class="no-businesses">
+          <div class="no-businesses-content">
+            <h3>No hay negocios registrados aún</h3>
+            <p>¡Sé el primero en registrar tu negocio!</p>
+            <div class="cta-buttons">
+              <a routerLink="/sign-up" class="btn btn-primary">Registrarse</a>
+              <a routerLink="/login" class="btn btn-secondary">Iniciar Sesión</a>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
